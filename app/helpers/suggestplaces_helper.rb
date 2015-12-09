@@ -1,0 +1,2 @@
+module SuggestplacesHelper
+end
