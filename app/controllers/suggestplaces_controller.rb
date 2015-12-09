@@ -20,6 +20,7 @@ class SuggestplacesController < ApplicationController
 			rjson = Array.new
 			poiLocs = params[:pois]
 			tweetLocs = params[:tweets]
+			ratings = Array.new(64) { |i| Array.new(5) { |i| 0 }}
 			watercolors = ["00FE00", "00FF00"]
 			totPop, avgPop, totInc, avgInc, totWF, avgWF, totWFIN, avgWFIN, totWFOUT, avgWFOUT = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		
@@ -136,6 +137,8 @@ class SuggestplacesController < ApplicationController
 				rating  = 5
 			end
 			
+			ratings[i][0] = rating
+			ratings[i][4] += rating
 			if(params[:filters][1].to_i > rating)
 				rjson2[i][2][0] = "ignore"
 			end
@@ -164,6 +167,8 @@ class SuggestplacesController < ApplicationController
 				rating  = 5
 			end
 			
+			ratings[i][1] = rating
+			ratings[i][4] -= rating
 			if(params[:filters][2].to_i > rating)
 				rjson2[i][2][0] = "ignore"
 			end
@@ -208,6 +213,8 @@ class SuggestplacesController < ApplicationController
 				rating  = 5
 			end
 			
+			ratings[i][2] = rating
+			ratings[i][4] += rating
 			if(params[:filters][3].to_i > rating)
 				rjson2[i][2][0] = "ignore"
 			end
@@ -234,16 +241,168 @@ class SuggestplacesController < ApplicationController
 				rating = 5
 			end
 			
+			ratings[i][3] = rating
+			ratings[i][4] += rating
 			if(params[:filters][4].to_i > rating)
 				rjson2[i][2][0] = "ignore"
 			end
 		}
 		
+		rjson2.each_with_index{ |box, i| box.push(ratings[i]) }
+		
 		render :json => rjson2
 	end
 	
 	def api
+		ratings = Array.new(64) { |i| Array.new(5) { |i| 0 }}
 		rjson2 = [[["-89.35713452476227","-89.3334021435717","48.35828117115878","48.37403112836908"],["-89.34526833416699","48.36615614976393"],["ignore"],[1662,49225.14,1380,832],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.35828117115878","48.37403112836908"],["-89.32153595297642","48.36615614976393"],["ignore"],[2548,42517.25,2086,1311],[4176,41358.81453124999,3346,2048,1298],[0,1]],[["-89.35713452476227","-89.3334021435717","48.37403112836908","48.389781085579386"],["-89.34526833416699","48.381906106974235"],["ignore"],[1837,49630.96,1395,838],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.37403112836908","48.389781085579386"],["-89.32153595297642","48.381906106974235"],["ignore"],[3010,52001.48,2183,1381],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.30966976238113","-89.28593738119056","48.35828117115878","48.37403112836908"],["-89.29780357178585","48.36615614976393"],["ignore"],[6370,40407.86,5318,3221],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.35828117115878","48.37403112836908"],["-89.27407119059528","48.36615614976393"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[11455,41369.29,9550,6165],[4176,41358.81453124999,3346,2048,1298],[2,4]],[["-89.30966976238113","-89.28593738119056","48.37403112836908","48.389781085579386"],["-89.29780357178585","48.381906106974235"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003c/div\u003e"],[11430,44408.94,9383,5508],[4176,41358.81453124999,3346,2048,1298],[3,4]],[["-89.28593738119056","-89.262205","48.37403112836908","48.389781085579386"],["-89.27407119059528","48.381906106974235"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[18301,43238.89,15038,9252],[4176,41358.81453124999,3346,2048,1298],[2,5]],[["-89.35713452476227","-89.3334021435717","48.389781085579386","48.40553104278969"],["-89.34526833416699","48.39765606418454"],["ignore"],[902,54344.17,654,413],[4176,41358.81453124999,3346,2048,1298],[0,1]],[["-89.3334021435717","-89.30966976238113","48.389781085579386","48.40553104278969"],["-89.32153595297642","48.39765606418454"],["ignore"],[2149,56892.75,1462,944],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.35713452476227","-89.3334021435717","48.40553104278969","48.42128099999999"],["-89.34526833416699","48.41340602139484"],["ignore"],[507,56634.36,371,216],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.40553104278969","48.42128099999999"],["-89.32153595297642","48.41340602139484"],["ignore"],[507,56634.36,371,216],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.30966976238113","-89.28593738119056","48.389781085579386","48.40553104278969"],["-89.29780357178585","48.39765606418454"],["ignore"],[9316,45710.71,7561,4580],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.389781085579386","48.40553104278969"],["-89.27407119059528","48.39765606418454"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[10431,42441.69,8505,5233],[4176,41358.81453124999,3346,2048,1298],[2,2]],[["-89.30966976238113","-89.28593738119056","48.40553104278969","48.42128099999999"],["-89.29780357178585","48.41340602139484"],["ignore"],[328,45827.12,251,163],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.40553104278969","48.42128099999999"],["-89.27407119059528","48.41340602139484"],["ignore"],[1610,49897.64,1229,805],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.262205","-89.23847261880942","48.35828117115878","48.37403112836908"],["-89.25033880940471","48.36615614976393"],["ignore"],[6369,48096.81,5395,3678],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.23847261880942","-89.21474023761886","48.35828117115878","48.37403112836908"],["-89.22660642821414","48.36615614976393"],["ignore"],[33,31423.24,30,17],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.262205","-89.23847261880942","48.37403112836908","48.389781085579386"],["-89.25033880940471","48.381906106974235"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[14387,39475.47,11452,6917],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.23847261880942","-89.21474023761886","48.37403112836908","48.389781085579386"],["-89.22660642821414","48.381906106974235"],["ignore"],[3637,27701.17,2901,1486],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.21474023761886","-89.19100785642829","48.35828117115878","48.37403112836908"],["-89.20287404702357","48.36615614976393"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.35828117115878","48.37403112836908"],["-89.17914166583299","48.36615614976393"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.21474023761886","-89.19100785642829","48.37403112836908","48.389781085579386"],["-89.20287404702357","48.381906106974235"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.37403112836908","48.389781085579386"],["-89.17914166583299","48.381906106974235"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.262205","-89.23847261880942","48.389781085579386","48.40553104278969"],["-89.25033880940471","48.39765606418454"],["ignore"],[8875,32757.15,7069,4062],[4176,41358.81453124999,3346,2048,1298],[3,3]],[["-89.23847261880942","-89.21474023761886","48.389781085579386","48.40553104278969"],["-89.22660642821414","48.39765606418454"],["ignore"],[4724,33104.39,3949,2255],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.262205","-89.23847261880942","48.40553104278969","48.42128099999999"],["-89.25033880940471","48.41340602139484"],["ignore"],[4182,31348.49,3108,1641],[4176,41358.81453124999,3346,2048,1298],[4,4]],[["-89.23847261880942","-89.21474023761886","48.40553104278969","48.42128099999999"],["-89.22660642821414","48.41340602139484"],["ignore"],[757,36074.37,629,380],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.21474023761886","-89.19100785642829","48.389781085579386","48.40553104278969"],["-89.20287404702357","48.39765606418454"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.389781085579386","48.40553104278969"],["-89.17914166583299","48.39765606418454"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.21474023761886","-89.19100785642829","48.40553104278969","48.42128099999999"],["-89.20287404702357","48.41340602139484"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.40553104278969","48.42128099999999"],["-89.17914166583299","48.41340602139484"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.35713452476227","-89.3334021435717","48.42128099999999","48.4370309572103"],["-89.34526833416699","48.429155978605145"],["ignore"],[486,70229.11,347,248],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.42128099999999","48.4370309572103"],["-89.32153595297642","48.429155978605145"],["ignore"],[486,70229.11,347,248],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.35713452476227","-89.3334021435717","48.4370309572103","48.4527809144206"],["-89.34526833416699","48.44490593581545"],["ignore"],[384,52753.81,282,204],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.4370309572103","48.4527809144206"],["-89.32153595297642","48.44490593581545"],["ignore"],[132,70183.73,94,67],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.30966976238113","-89.28593738119056","48.42128099999999","48.4370309572103"],["-89.29780357178585","48.429155978605145"],["ignore"],[730,63729.97,558,325],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.42128099999999","48.4370309572103"],["-89.27407119059528","48.429155978605145"],["ignore"],[5338,61845.64,3410,2461],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.30966976238113","-89.28593738119056","48.4370309572103","48.4527809144206"],["-89.29780357178585","48.44490593581545"],["ignore"],[1962,64035.65,1229,914],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.4370309572103","48.4527809144206"],["-89.27407119059528","48.44490593581545"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[10808,55660.11,7858,4977],[4176,41358.81453124999,3346,2048,1298],[0,1]],[["-89.35713452476227","-89.3334021435717","48.4527809144206","48.468530871630904"],["-89.34526833416699","48.46065589302575"],["ignore"],[384,52753.81,282,204],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.4527809144206","48.468530871630904"],["-89.32153595297642","48.46065589302575"],["ignore"],[469,64615.63,303,224],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.35713452476227","-89.3334021435717","48.468530871630904","48.484280828841214"],["-89.34526833416699","48.47640585023606"],["ignore"],[256,52695,188,136],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.3334021435717","-89.30966976238113","48.468530871630904","48.484280828841214"],["-89.32153595297642","48.47640585023606"],["ignore"],[598,54455.51,412,260],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.30966976238113","-89.28593738119056","48.4527809144206","48.468530871630904"],["-89.29780357178585","48.46065589302575"],["ignore"],[1371,62414.49,853,638],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.4527809144206","48.468530871630904"],["-89.27407119059528","48.46065589302575"],["ignore"],[6196,57416.49,4413,2852],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.30966976238113","-89.28593738119056","48.468530871630904","48.484280828841214"],["-89.29780357178585","48.47640585023606"],["ignore"],[448,51855.02,324,189],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.28593738119056","-89.262205","48.468530871630904","48.484280828841214"],["-89.27407119059528","48.47640585023606"],["ignore"],[615,55020.39,427,294],[4176,41358.81453124999,3346,2048,1298],[0,1]],[["-89.262205","-89.23847261880942","48.42128099999999","48.4370309572103"],["-89.25033880940471","48.429155978605145"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[15747,42483.45,12285,7224],[4176,41358.81453124999,3346,2048,1298],[2,4]],[["-89.23847261880942","-89.21474023761886","48.42128099999999","48.4370309572103"],["-89.22660642821414","48.429155978605145"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003c/div\u003e"],[10675,40606.48,9116,5307],[4176,41358.81453124999,3346,2048,1298],[5,10]],[["-89.262205","-89.23847261880942","48.4370309572103","48.4527809144206"],["-89.25033880940471","48.44490593581545"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003c/div\u003e"],[17501,44749.3,14520,8603],[4176,41358.81453124999,3346,2048,1298],[4,3]],[["-89.23847261880942","-89.21474023761886","48.4370309572103","48.4527809144206"],["-89.22660642821414","48.44490593581545"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003c/div\u003e"],[18112,43544.06,15446,9436],[4176,41358.81453124999,3346,2048,1298],[5,8]],[["-89.21474023761886","-89.19100785642829","48.42128099999999","48.4370309572103"],["-89.20287404702357","48.429155978605145"],["ignore"],[891,34498.07,737,441],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.42128099999999","48.4370309572103"],["-89.17914166583299","48.429155978605145"],["ignore"],[0,0,0,0],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.21474023761886","-89.19100785642829","48.4370309572103","48.4527809144206"],["-89.20287404702357","48.44490593581545"],["ignore"],[7038,43760,5694,3410],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.4370309572103","48.4527809144206"],["-89.17914166583299","48.44490593581545"],["ignore"],[935,37085.57,775,451],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.262205","-89.23847261880942","48.4527809144206","48.468530871630904"],["-89.25033880940471","48.46065589302575"],["ignore"],[9648,45345.54,7581,4718],[4176,41358.81453124999,3346,2048,1298],[1,0]],[["-89.23847261880942","-89.21474023761886","48.4527809144206","48.468530871630904"],["-89.22660642821414","48.46065589302575"],["\u003cdiv class='rating-title'\u003eCost Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCrime Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-half-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eSocial Rating:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e\u003c/br\u003e\u003cdiv class='rating-title'\u003eCompetition:\u003c/div\u003e \u003cdiv class='rating-rating'\u003e\u003ci class='fa fa-star'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003ci class='fa fa-star-o'\u003e\u003c/i\u003e\u003c/div\u003e"],[10694,42476.86,8866,5488],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.262205","-89.23847261880942","48.468530871630904","48.484280828841214"],["-89.25033880940471","48.47640585023606"],["ignore"],[905,51724.01,622,447],[4176,41358.81453124999,3346,2048,1298],[0,1]],[["-89.23847261880942","-89.21474023761886","48.468530871630904","48.484280828841214"],["-89.22660642821414","48.47640585023606"],["ignore"],[350,44504.75,243,174],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.21474023761886","-89.19100785642829","48.4527809144206","48.468530871630904"],["-89.20287404702357","48.46065589302575"],["ignore"],[9238,42276.86,7486,4508],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.4527809144206","48.468530871630904"],["-89.17914166583299","48.46065589302575"],["ignore"],[4269,38992.35,3639,2286],[4176,41358.81453124999,3346,2048,1298],[1,2]],[["-89.21474023761886","-89.19100785642829","48.468530871630904","48.484280828841214"],["-89.20287404702357","48.47640585023606"],["ignore"],[2349,43171.04,1988,1192],[4176,41358.81453124999,3346,2048,1298],[0,0]],[["-89.19100785642829","-89.1672754752377","48.468530871630904","48.484280828841214"],["-89.17914166583299","48.47640585023606"],["ignore"],[2967,40688.62,2603,1632],[4176,41358.81453124999,3346,2048,1298],[2,6]]]
+		
+		#Filter output
+		rjson2.each_with_index { |box, i| 
+			next if(rjson2[i][2][0] == "ignore") 
+			#check for population
+			tcnt = 0
+			rating = 0
+			while(tcnt < 10) 
+				if(box[3][0].to_i < (params[:filters][0].to_i + (tcnt*params[:filters][0].to_i)) && box[5][0] <= tcnt)
+					rjson2[i][2][0] = "ignore"
+				end
+				tcnt += 1
+			end
+			next if(rjson2[i][2][0] == "ignore") 
+			#calculate location ratings			
+			##cost rating of locality
+			locPric = (box[3][1]/box[4][1]) * 100
+			if(locPric.to_i >= 95 && locPric.to_i <= 105)
+				rjson2[i][2][0] = "<div class='rating-title'>Cost Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-half-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 3
+			elsif(locPric.to_i >= 80 && locPric.to_i <= 94)
+				rjson2[i][2][0] = "<div class='rating-title'>Cost Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"			
+				rating  = 2
+			elsif(locPric.to_i >= 106 && locPric.to_i <= 120)
+				rjson2[i][2][0] = "<div class='rating-title'>Cost Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 4
+			elsif(locPric.to_i <= 79)
+				rjson2[i][2][0] = "<div class='rating-title'>Cost Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 1
+			elsif(locPric.to_i >= 121)
+				rjson2[i][2][0] = "<div class='rating-title'>Cost Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i></div>"
+				rating  = 5
+			end
+			
+			ratings[i][0] = rating
+			ratings[i][4] += rating
+			if(params[:filters][1].to_i > rating)
+				rjson2[i][2][0] = "ignore"
+			end
+			
+			next if(rjson2[i][2][0] == "ignore")
+			
+			##crime rating of locality
+			locCrim = ((box[3][3].to_f/(box[3][2].to_f - box[3][3].to_f)) * 100 - 100).to_i
+			avgCrim = ((box[4][3].to_f/(box[4][4].to_f)) * 100 - 100).to_i
+			crimeRat = (locCrim.to_f/avgCrim.to_f) * 100
+			rating = 0
+			if(crimeRat.to_i >= 90 && crimeRat.to_i <= 110)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Crime Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-half-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 3
+			elsif(crimeRat.to_i >= 111 && crimeRat.to_i <= 130)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Crime Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"			
+				rating  = 2
+			elsif(crimeRat.to_i >= 70 && crimeRat.to_i <= 89)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Crime Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 4
+			elsif(crimeRat.to_i >= 131)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Crime Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 1
+			elsif(crimeRat.to_i <= 69)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Crime Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i></div>"
+				rating  = 5
+			end
+			
+			ratings[i][1] = rating
+			ratings[i][4] -= rating
+			if(params[:filters][2].to_i > rating)
+				rjson2[i][2][0] = "ignore"
+			end
+			
+		}
+		
+		totTweets = 0
+		actBbox = 0
+		totComt = 0
+		rjson2.each_with_index{ |box1, j| 
+			if(rjson2[j][2][0] != "ignore") 
+				totTweets += box1[5][1]
+				totComt += box1[5][0]
+				actBbox += 1
+			end
+		}
+		avgATwts =  totTweets / actBbox
+		rjson2.each_with_index { |box, i| 
+			next if(rjson2[i][2][0] == "ignore") 	
+			##social rating of locality
+			cbbtwts = box[5][1]
+			twtRat = 0
+			rating = 0
+			if(avgATwts != 0)
+				twtRat = (box[5][1] - avgATwts)/avgATwts
+			end
+			
+			if(twtRat == 1)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Social Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-half-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 3
+			elsif(twtRat == 0)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Social Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"			
+				rating  = 2
+			elsif(twtRat == 2)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Social Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 4
+			elsif(twtRat < 0)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Social Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating  = 1
+			elsif(twtRat > 2)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Social Rating:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i></div>"
+				rating  = 5
+			end
+			
+			ratings[i][2] = rating
+			ratings[i][4] += rating
+			if(params[:filters][3].to_i > rating)
+				rjson2[i][2][0] = "ignore"
+			end
+			
+			next if(rjson2[i][2][0] == "ignore")
+			
+			##social rating of locality
+			cbbComt = box[5][0]
+			rating = 0
+			if(cbbComt == 2)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Competition:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-half-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating = 3
+			elsif(cbbComt == 1)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Competition:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"			
+				rating = 2
+			elsif(cbbComt == 3)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Competition:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i></div>"
+				rating = 4
+			elsif(cbbComt == 0)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Competition:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i></div>"
+				rating = 1
+			elsif(cbbComt >= 4)
+				rjson2[i][2][0] += "</br><div class='rating-title'>Competition:</div> <div class='rating-rating'><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i></div>"
+				rating = 5
+			end
+			
+			ratings[i][3] = rating
+			ratings[i][4] += rating
+			if(params[:filters][4].to_i > rating)
+				rjson2[i][2][0] = "ignore"
+			end
+		}
+		
+		rjson2.each_with_index{ |box, i| box.push(ratings[i]) }
+		
 		render :json => rjson2
 	end
 	
