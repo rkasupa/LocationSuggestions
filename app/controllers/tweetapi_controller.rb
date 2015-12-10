@@ -2,7 +2,6 @@ class TweetapiController < ApplicationController
 	skip_before_action :verify_authenticity_token
 	respond_to :html, :json, :xml
 	require 'openssl'
-	OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 	
 	def search
 		client = Twitter::REST::Client.new do |config|
