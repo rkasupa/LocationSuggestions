@@ -3,7 +3,6 @@ class WordsapiController < ApplicationController
 	respond_to :html, :json, :xml
 	require 'openssl'
 	require 'open-uri'
-	OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 	
 	def search
 		headers = { "X-Mashape-Key" => "YXc3MWWZ92mshFpOIiyNs5EKfY7wp17yprRjsnU3Uhfxt4grS2", "Accept" => "application/json" }	
